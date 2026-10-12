@@ -209,159 +209,102 @@ if (supportsMagneticHover) {
 }
 
 const cursorFollower = document.querySelector('.cursor-follower');
-const canShowCursorFollower = window.matchMedia('(pointer: fine)').matches &&
-  !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const zoomWordClass = 'cursor-word-zoom';
+const zoomExcludedSelector = '.project-card, script, style, noscript, textarea, input, select, option, .cursor-follower';
+let activeZoomWord = null;
 
-if (cursorFollower && canShowCursorFollower) {
-  let pointerX = 0;
-  let pointerY = 0;
-  let followerX = 0;
-  let followerY = 0;
-  let animationFrame = 0;
-  let zoomedWord = null;
-  const retiringWords = new Map();
-  let wordZoomFrame = 0;
-  let latestPointerPosition = null;
-
-  const unwrapWord = (word) => {
-    if (!word.parentNode) return;
-    const parent = word.parentNode;
-    parent.replaceChild(document.createTextNode(word.textContent), word);
-    parent.normalize();
-  };
-
-  const removeWordZoom = (immediate = false) => {
-    if (!zoomedWord) return;
-    const leaving = zoomedWord;
-    zoomedWord = null;
-    leaving.classList.remove('is-active');
-    if (immediate) {
-      unwrapWord(leaving);
-      return;
-    }
-    const timer = window.setTimeout(() => {
-      unwrapWord(leaving);
-      retiringWords.delete(leaving);
-    }, 150);
-    retiringWords.set(leaving, timer);
-  };
-
-  const getCaretRange = (event) => {
-    if (document.caretRangeFromPoint) return document.caretRangeFromPoint(event.clientX, event.clientY);
-    const position = document.caretPositionFromPoint?.(event.clientX, event.clientY);
-    if (!position) return null;
-    const range = document.createRange();
-    range.setStart(position.offsetNode, position.offset);
-    range.collapse(true);
-    return range;
-  };
-
-  const updateWordZoom = (event) => {
-    if (zoomedWord) {
-      const bounds = zoomedWord.getBoundingClientRect();
-      if (event.clientX >= bounds.left && event.clientX <= bounds.right &&
-          event.clientY >= bounds.top && event.clientY <= bounds.bottom) return;
-    }
-
-    let caret = getCaretRange(event);
-    if (!caret || caret.startContainer.nodeType !== Node.TEXT_NODE) {
-      removeWordZoom();
-      return;
-    }
-    if (caret.startContainer.parentElement?.closest('.project-footnote')) {
-      removeWordZoom();
-      return;
-    }
-    const wordWrapper = caret.startContainer.parentElement?.closest('.cursor-word-zoom');
-    if (wordWrapper) {
-      if (wordWrapper === zoomedWord) return;
-      const timer = retiringWords.get(wordWrapper);
-      if (timer) {
-        removeWordZoom();
-        window.clearTimeout(timer);
-        retiringWords.delete(wordWrapper);
-        zoomedWord = wordWrapper;
-        window.requestAnimationFrame(() => {
-          if (wordWrapper === zoomedWord && wordWrapper.isConnected) wordWrapper.classList.add('is-active');
-        });
-        return;
+const wrapZoomWords = (root) => {
+  if (root.nodeType === Node.TEXT_NODE) {
+    const parent = root.parentElement;
+    if (!parent || parent.closest(`${zoomExcludedSelector}, .${zoomWordClass}`) || !/\S/.test(root.nodeValue)) return;
+    const pieces = root.nodeValue.match(/\s+|\S+/g) || [];
+    const fragment = document.createDocumentFragment();
+    pieces.forEach((piece) => {
+      if (/^\s+$/.test(piece)) {
+        fragment.append(document.createTextNode(piece));
+      } else {
+        const word = document.createElement('span');
+        word.className = zoomWordClass;
+        word.textContent = piece;
+        fragment.append(word);
       }
-    }
-    if (zoomedWord?.contains(caret.startContainer)) return;
-
-    removeWordZoom();
-    caret = getCaretRange(event);
-    if (!caret || caret.startContainer.nodeType !== Node.TEXT_NODE) return;
-
-    const textNode = caret.startContainer;
-    const text = textNode.textContent;
-    let start = caret.startOffset;
-    let end = caret.startOffset;
-    while (start > 0 && !/\s/.test(text[start - 1])) start--;
-    while (end < text.length && !/\s/.test(text[end])) end++;
-    if (start === end) return;
-
-    const wordRange = document.createRange();
-    wordRange.setStart(textNode, start);
-    wordRange.setEnd(textNode, end);
-    zoomedWord = document.createElement('span');
-    zoomedWord.className = 'cursor-word-zoom';
-    try {
-      wordRange.surroundContents(zoomedWord);
-      const word = zoomedWord;
-      window.requestAnimationFrame(() => {
-        if (word === zoomedWord && word.isConnected) word.classList.add('is-active');
-      });
-    } catch {
-      zoomedWord = null;
-    }
-  };
-
-  const followPointer = () => {
-    followerX += (pointerX - followerX) * 0.18;
-    followerY += (pointerY - followerY) * 0.18;
-    cursorFollower.style.transform = `translate3d(${followerX}px, ${followerY}px, 0) translate(-50%, -50%)`;
-    if (Math.abs(pointerX - followerX) + Math.abs(pointerY - followerY) > 0.3) {
-      animationFrame = window.requestAnimationFrame(followPointer);
-    } else {
-      animationFrame = 0;
-    }
-  };
-
-  document.addEventListener('pointermove', (event) => {
-    if (event.pointerType === 'touch') return;
-    pointerX = event.clientX;
-    pointerY = event.clientY;
-    latestPointerPosition = { clientX: event.clientX, clientY: event.clientY };
-    if (!wordZoomFrame) {
-      wordZoomFrame = window.requestAnimationFrame(() => {
-        wordZoomFrame = 0;
-        updateWordZoom(latestPointerPosition);
-      });
-    }
-    cursorFollower.classList.add('is-visible');
-    if (!animationFrame) animationFrame = window.requestAnimationFrame(followPointer);
-  });
-
-  document.addEventListener('pointerover', (event) => {
-    const interactive = event.target.closest('a, button, input, select, textarea, [role="button"]');
-    cursorFollower.classList.toggle('is-on-control', Boolean(interactive));
-  });
-
-  document.addEventListener('pointerdown', () => cursorFollower.classList.add('is-pressed'));
-  document.addEventListener('pointerup', () => cursorFollower.classList.remove('is-pressed'));
-  document.addEventListener('pointerleave', () => {
-    cursorFollower.classList.remove('is-visible', 'is-on-control', 'is-pressed');
-    if (wordZoomFrame) window.cancelAnimationFrame(wordZoomFrame);
-    wordZoomFrame = 0;
-    removeWordZoom(true);
-    retiringWords.forEach((timer, word) => {
-      window.clearTimeout(timer);
-      unwrapWord(word);
     });
-    retiringWords.clear();
-  });
-}
+    root.replaceWith(fragment);
+    return;
+  }
+  if (root.nodeType !== Node.ELEMENT_NODE || root.closest?.(zoomExcludedSelector) || root.matches?.(`.${zoomWordClass}`)) return;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  textNodes.forEach(wrapZoomWords);
+};
+
+wrapZoomWords(document.body);
+const zoomWordObserver = new MutationObserver((records) => {
+  records.forEach((record) => record.addedNodes.forEach(wrapZoomWords));
+});
+zoomWordObserver.observe(document.body, { childList: true, subtree: true });
+
+const wordAtPoint = (x, y) => {
+  const element = document.elementFromPoint(x, y);
+  if (!element || element.closest(zoomExcludedSelector)) return null;
+  return element.closest(`.${zoomWordClass}`);
+};
+
+const nearestZoomWord = (x, y) => {
+  const direct = wordAtPoint(x, y);
+  if (direct) return direct;
+  for (const radius of [12, 24, 36, 50, 64]) {
+    for (let step = 0; step < 16; step++) {
+      const angle = (Math.PI * 2 * step) / 16;
+      const nearby = wordAtPoint(x + Math.cos(angle) * radius, y + Math.sin(angle) * radius);
+      if (nearby) return nearby;
+    }
+  }
+  return null;
+};
+
+let pointerX = 0;
+let pointerY = 0;
+let followerX = 0;
+let followerY = 0;
+let followerFrame = 0;
+const followPointer = () => {
+  followerX += (pointerX - followerX) * 0.18;
+  followerY += (pointerY - followerY) * 0.18;
+  cursorFollower.style.transform = `translate3d(${followerX}px, ${followerY}px, 0) translate(-50%, -50%)`;
+  if (Math.abs(pointerX - followerX) + Math.abs(pointerY - followerY) > 0.3) followerFrame = requestAnimationFrame(followPointer);
+  else followerFrame = 0;
+};
+
+document.addEventListener('pointermove', (event) => {
+  if (event.pointerType === 'touch') return;
+  const nextWord = nearestZoomWord(event.clientX, event.clientY);
+  if (nextWord !== activeZoomWord) {
+    activeZoomWord?.classList.remove('is-active');
+    activeZoomWord = nextWord;
+    activeZoomWord?.classList.add('is-active');
+  }
+  if (!cursorFollower) return;
+  pointerX = event.clientX;
+  pointerY = event.clientY;
+  cursorFollower.classList.add('is-visible');
+  if (!followerFrame) followerFrame = requestAnimationFrame(followPointer);
+});
+
+document.addEventListener('pointerover', (event) => {
+  if (!cursorFollower) return;
+  const interactive = event.target.closest('a, button, input, select, textarea, [role="button"]');
+  cursorFollower.classList.toggle('is-on-control', Boolean(interactive));
+});
+
+document.addEventListener('pointerdown', () => cursorFollower?.classList.add('is-pressed'));
+document.addEventListener('pointerup', () => cursorFollower?.classList.remove('is-pressed'));
+document.addEventListener('pointerleave', () => {
+  cursorFollower?.classList.remove('is-visible', 'is-on-control', 'is-pressed');
+  activeZoomWord?.classList.remove('is-active');
+  activeZoomWord = null;
+});
 
 const contactHeading = document.querySelector('.contact h2');
 if (contactHeading && 'IntersectionObserver' in window &&
@@ -627,3 +570,42 @@ if (typewriterTargets.length && 'IntersectionObserver' in window &&
   }, { threshold: 0.2 });
   typewriterTargets.forEach((target) => typewriterObserver.observe(target));
 }
+
+// Let visitors scrub the continuously moving destination cards with mouse or touch.
+document.querySelectorAll('.destination-reel').forEach((reel) => {
+  const track = reel.querySelector('.destination-track');
+  if (!track) return;
+  let drag = null;
+
+  const finishDrag = (event) => {
+    if (!drag || (event && event.pointerId !== drag.pointerId)) return;
+    const animation = drag.animation;
+    drag = null;
+    reel.classList.remove('is-dragging');
+    try { reel.releasePointerCapture(event.pointerId); } catch {}
+    if (animation) animation.play();
+  };
+
+  reel.addEventListener('pointerdown', (event) => {
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    const animation = track.getAnimations().find((item) => item.animationName === 'edrive-destination-scroll');
+    if (!animation) return;
+    const firstSet = track.querySelector('.destination-set');
+    const duration = Number(animation.effect?.getTiming().duration) || 40000;
+    const distance = firstSet?.getBoundingClientRect().width || track.scrollWidth / 2;
+    drag = { pointerId: event.pointerId, startX: event.clientX, startTime: Number(animation.currentTime) || 0, animation, duration, speed: distance / duration };
+    animation.pause();
+    reel.classList.add('is-dragging');
+    reel.setPointerCapture(event.pointerId);
+  });
+
+  reel.addEventListener('pointermove', (event) => {
+    if (!drag || event.pointerId !== drag.pointerId) return;
+    const next = drag.startTime - (event.clientX - drag.startX) / drag.speed;
+    drag.animation.currentTime = ((next % drag.duration) + drag.duration) % drag.duration;
+  });
+
+  reel.addEventListener('pointerup', finishDrag);
+  reel.addEventListener('pointercancel', finishDrag);
+  reel.addEventListener('lostpointercapture', finishDrag);
+});
