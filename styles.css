@@ -444,3 +444,18 @@ body{background-color:#e9eff5;background-image:linear-gradient(rgba(239,244,249,
 .education-heading .typewriter-line{padding-inline:.26em;margin-inline:-.26em}
 .education-heading .typewriter-line-two{white-space:nowrap;max-width:none;padding-right:.45em;margin-right:0}
 .education-heading .cursor-word-zoom.is-active{transform:scale(1.12);margin-inline:.04em}
+/* Blue highlight follows the pointer word by word. */
+.cursor-word-zoom.is-active{color:#276ef1!important;transform:scale(1.08);margin-inline:.025em}
+.cursor-follower.is-on-control{opacity:0!important}
+@media(max-width:620px){.cursor-word-zoom.is-active{transform:none;margin-inline:0}}
+
+/* Tighten the portfolio rhythm and keep the desktop cursor decoration off phones. */
+.hero{padding-top:34px}
+.education{padding-bottom:24px}
+.work{padding-top:18px}
+@media(max-width:620px){
+  .hero{padding-top:34px}
+  .education{padding-bottom:20px}
+  .work{padding-top:18px}
+  .cursor-follower{display:none!important}
+}
