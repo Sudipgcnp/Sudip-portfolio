@@ -257,6 +257,14 @@ html{scroll-padding-top:94px}
 .social-link:hover,.social-link:focus-visible{transform:translateY(-3px) scale(1.04)}
 @media(max-width:620px){.social-links{align-items:flex-start;flex-direction:column;gap:12px;padding-bottom:16px}.social-icons{gap:10px}.social-link,.social-linkedin{width:42px;height:42px;flex-basis:42px}.social-link svg{width:23px;height:23px}.social-facebook svg{width:25px;height:25px}.social-instagram svg,.social-linkedin svg{width:27px;height:27px}}
 
+/* Reveal each social platform name below its icon on hover or keyboard focus. */
+.social-link{position:relative}
+.social-links{padding-bottom:31px}
+.social-link::after{content:attr(title);position:absolute;top:calc(100% + 8px);left:50%;z-index:2;transform:translate(-50%,-4px);color:#d7e3f5;font:600 10px/1.2 var(--body);white-space:nowrap;opacity:0;visibility:hidden;transition:opacity .18s ease,transform .18s ease,visibility .18s ease;pointer-events:none}
+.social-link:hover::after,.social-link:focus-visible::after{opacity:1;visibility:visible;transform:translate(-50%,0)}
+@media(max-width:620px){.social-links{padding-bottom:26px}}
+@media(prefers-reduced-motion:reduce){.social-link::after{transition:none}}
+
 /* Project library filters for current and future work */
 .projects-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;padding:0 0 24px}
 .projects-heading>div>span{color:var(--violet);font:8px var(--mono);letter-spacing:.12em}
@@ -530,7 +538,6 @@ body{background-color:#e9eff5;background-image:linear-gradient(rgba(239,244,249,
   .work{padding-top:18px}
   .cursor-follower{display:none!important}
 }
-
 
 
 
