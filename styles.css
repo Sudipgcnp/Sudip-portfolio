@@ -201,6 +201,7 @@ html{scroll-padding-top:94px}
 .social-links{margin-bottom:2px;border-top:0;border-bottom:1px solid rgba(255,255,255,.16);padding:2px 0 15px}
 .social-facebook{color:#fff;background:#0866ff;border-color:#0866ff}
 .social-instagram{color:#fff;background:radial-gradient(circle at 30% 105%,#fdf497 0,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285aeb 90%);border-color:transparent}
+.social-instagram{color:#fff;background:radial-gradient(circle at 8% 100%,#feda75 0%,#fa7e1e 16%,transparent 45%),radial-gradient(circle at 100% 0%,#405de6 0%,#833ab4 40%,transparent 72%),linear-gradient(45deg,#fd5949 0%,#d6249f 55%,#962fbf 100%);border-color:transparent}
 .social-github{color:#171515;background:#fff;border-color:#fff}
 .social-linkedin{color:#fff;background:#0a66c2;border-color:#0a66c2}
 .social-linkedin svg path{stroke:currentColor}
@@ -224,6 +225,7 @@ html{scroll-padding-top:94px}
 .social-link:hover,.social-link:focus-visible{transform:scale(1.12);filter:none}
 .social-facebook:hover,.social-facebook:focus-visible{color:#fff;background:#0866ff;border-color:#0866ff}
 .social-instagram:hover,.social-instagram:focus-visible{color:#fff;background:radial-gradient(circle at 30% 105%,#fdf497 0,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285aeb 90%);border-color:transparent}
+.social-instagram:hover,.social-instagram:focus-visible{color:#fff;background:radial-gradient(circle at 8% 100%,#feda75 0%,#fa7e1e 16%,transparent 45%),radial-gradient(circle at 100% 0%,#405de6 0%,#833ab4 40%,transparent 72%),linear-gradient(45deg,#fd5949 0%,#d6249f 55%,#962fbf 100%);border-color:transparent}
 .social-github:hover,.social-github:focus-visible{color:#171515;background:#fff;border-color:#fff}
 .social-linkedin:hover,.social-linkedin:focus-visible{color:#fff;background:#0a66c2;border-color:#0a66c2}
 .social-whatsapp{color:#fff;background:#25d366;border-color:#25d366}
@@ -233,6 +235,7 @@ html{scroll-padding-top:94px}
 .social-link:hover,.social-link:focus-visible{background:var(--social-brand-bg);color:var(--social-brand-ink);border-color:var(--social-brand-border)}
 .social-facebook{--social-brand-bg:#0866ff;--social-brand-ink:#fff;--social-brand-border:#0866ff}
 .social-instagram{--social-brand-bg:radial-gradient(circle at 30% 105%,#fdf497 0,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285aeb 90%);--social-brand-ink:#fff;--social-brand-border:transparent}
+.social-instagram{--social-brand-bg:radial-gradient(circle at 8% 100%,#feda75 0%,#fa7e1e 16%,transparent 45%),radial-gradient(circle at 100% 0%,#405de6 0%,#833ab4 40%,transparent 72%),linear-gradient(45deg,#fd5949 0%,#d6249f 55%,#962fbf 100%);--social-brand-ink:#fff;--social-brand-border:transparent}
 .social-github{--social-brand-bg:#fff;--social-brand-ink:#171515;--social-brand-border:#fff}
 .social-whatsapp{--social-brand-bg:#25d366;--social-brand-ink:#fff;--social-brand-border:#25d366}
 .social-linkedin{--social-brand-bg:#0a66c2;--social-brand-ink:#fff;--social-brand-border:#0a66c2}
@@ -240,6 +243,19 @@ html{scroll-padding-top:94px}
 .social-instagram svg{fill:none;stroke:#fff;stroke-width:2.15;stroke-linecap:round;stroke-linejoin:round;overflow:hidden;shape-rendering:geometricPrecision}
 .social-instagram svg{transform:scale(1.03)}
 .social-instagram .social-dot{fill:#fff;stroke:none}
+
+/* Contact social links: larger, unmistakable brand buttons matching the reference. */
+.social-links{align-items:center;gap:12px;padding:0 0 18px;border-bottom:1px solid rgba(255,255,255,.2)}
+.social-icons{gap:10px}
+.social-link,.social-linkedin{width:46px;height:46px;flex:0 0 46px;border:0;border-radius:50%}
+.social-link svg{width:25px;height:25px}
+.social-facebook svg{width:27px;height:27px}
+.social-instagram svg{width:29px;height:29px}
+.social-whatsapp svg{width:27px;height:27px}
+.social-github svg{width:27px;height:27px}
+.social-linkedin svg{width:29px;height:29px}
+.social-link:hover,.social-link:focus-visible{transform:translateY(-3px) scale(1.04)}
+@media(max-width:620px){.social-links{align-items:flex-start;flex-direction:column;gap:12px;padding-bottom:16px}.social-icons{gap:10px}.social-link,.social-linkedin{width:42px;height:42px;flex-basis:42px}.social-link svg{width:23px;height:23px}.social-facebook svg{width:25px;height:25px}.social-instagram svg,.social-linkedin svg{width:27px;height:27px}}
 
 /* Project library filters for current and future work */
 .projects-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;padding:0 0 24px}
@@ -514,5 +530,9 @@ body{background-color:#e9eff5;background-image:linear-gradient(rgba(239,244,249,
   .work{padding-top:18px}
   .cursor-follower{display:none!important}
 }
+
+
+
+
 
 
