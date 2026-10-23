@@ -185,6 +185,61 @@ html{scroll-padding-top:94px}
 .phone-options svg{width:14px;height:14px}
 @media(max-width:620px){.contact-method{grid-template-columns:57px minmax(0,1fr) 18px}.phone-trigger{font-size:10px}.phone-options a{font-size:9px}.phone-options svg{width:12px;height:12px}}
 @media(prefers-reduced-motion:reduce){.contact-method,.contact-icon,.phone-options,.phone-options a{transition:none}}
+.social-links{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:17px 0 4px;border-top:1px solid rgba(255,255,255,.16)}
+.social-label{color:#9eabc2;font:500 9px/1 var(--mono);letter-spacing:.12em}
+.social-icons{display:flex;align-items:center;gap:10px}
+.social-link{width:34px;height:34px;display:grid;place-items:center;border:1px solid rgba(185,211,255,.3);border-radius:50%;color:#c5d8ff;transition:color .2s,background .2s,border-color .2s,transform .2s}
+.social-link:hover,.social-link:focus-visible{color:#16223c;background:#c5d8ff;border-color:#c5d8ff;transform:translateY(-2px)}
+.social-link:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.social-link svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.social-facebook svg{fill:currentColor;stroke:none;width:19px;height:19px}
+.social-linkedin svg{fill:currentColor;stroke:none;width:18px;height:18px}
+.social-linkedin svg path{fill:none;stroke:#1e2c49;stroke-width:1.7}
+.social-dot{fill:currentColor;stroke:none}
+@media(max-width:620px){.social-links{gap:12px;padding-top:14px}.social-label{font-size:7px}.social-icons{gap:8px}.social-link{width:32px;height:32px}}
+@media(prefers-reduced-motion:reduce){.social-link{transition:none}}
+.social-links{margin-bottom:2px;border-top:0;border-bottom:1px solid rgba(255,255,255,.16);padding:2px 0 15px}
+.social-facebook{color:#fff;background:#0866ff;border-color:#0866ff}
+.social-instagram{color:#fff;background:radial-gradient(circle at 30% 105%,#fdf497 0,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285aeb 90%);border-color:transparent}
+.social-github{color:#171515;background:#fff;border-color:#fff}
+.social-linkedin{color:#fff;background:#0a66c2;border-color:#0a66c2}
+.social-linkedin svg path{stroke:currentColor}
+.social-facebook:hover,.social-facebook:focus-visible,.social-instagram:hover,.social-instagram:focus-visible,.social-github:hover,.social-github:focus-visible,.social-linkedin:hover,.social-linkedin:focus-visible{filter:brightness(1.12);color:#fff}
+.social-github:hover,.social-github:focus-visible{color:#171515}
+.social-links{border:0;border-bottom:1px solid #ffffff2c;padding-bottom:15px}
+.contact-methods{border-top:0}
+.social-github svg{fill:currentColor;stroke:none;width:21px;height:21px}
+.social-linkedin{width:34px;height:34px;border-radius:50%}
+.social-linkedin svg{fill:#fff;stroke:none;width:27px;height:27px}
+.social-linkedin svg path{fill:none;stroke:#fff;stroke-width:2.6}
+.social-linkedin svg circle{fill:#fff}
+.social-instagram svg{width:24.2px;height:24.2px;transform:none}
+.social-label,.contact-label,.contact-location>span:first-child{font:700 10px/1.3 var(--body);letter-spacing:.12em;color:#b9c8df}
+.contact-label,.contact-location>span:first-child{color:#a9b9d3}
+.contact-method b,.contact-location b,.phone-trigger b{font:600 13px/1.5 var(--body);letter-spacing:.005em}
+.social-label{font-size:10px}
+@media(max-width:620px){.social-links{padding-bottom:11px}.social-label,.contact-label,.contact-location>span:first-child{font-size:8px}.contact-method b,.contact-location b,.phone-trigger b{font-size:11px}}
+.contact-email:hover b,.contact-email:focus-visible b{color:#276ef1}
+.social-link,.social-link:hover,.social-link:focus-visible{transition:transform .2s cubic-bezier(.2,.8,.25,1);}
+.social-link:hover,.social-link:focus-visible{transform:scale(1.12);filter:none}
+.social-facebook:hover,.social-facebook:focus-visible{color:#fff;background:#0866ff;border-color:#0866ff}
+.social-instagram:hover,.social-instagram:focus-visible{color:#fff;background:radial-gradient(circle at 30% 105%,#fdf497 0,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285aeb 90%);border-color:transparent}
+.social-github:hover,.social-github:focus-visible{color:#171515;background:#fff;border-color:#fff}
+.social-linkedin:hover,.social-linkedin:focus-visible{color:#fff;background:#0a66c2;border-color:#0a66c2}
+.social-whatsapp{color:#fff;background:#25d366;border-color:#25d366}
+.social-whatsapp svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.social-whatsapp svg path:last-child{fill:#fff;stroke:none}
+.social-whatsapp:hover,.social-whatsapp:focus-visible{color:#fff;background:#25d366;border-color:#25d366}
+.social-link:hover,.social-link:focus-visible{background:var(--social-brand-bg);color:var(--social-brand-ink);border-color:var(--social-brand-border)}
+.social-facebook{--social-brand-bg:#0866ff;--social-brand-ink:#fff;--social-brand-border:#0866ff}
+.social-instagram{--social-brand-bg:radial-gradient(circle at 30% 105%,#fdf497 0,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285aeb 90%);--social-brand-ink:#fff;--social-brand-border:transparent}
+.social-github{--social-brand-bg:#fff;--social-brand-ink:#171515;--social-brand-border:#fff}
+.social-whatsapp{--social-brand-bg:#25d366;--social-brand-ink:#fff;--social-brand-border:#25d366}
+.social-linkedin{--social-brand-bg:#0a66c2;--social-brand-ink:#fff;--social-brand-border:#0a66c2}
+.social-instagram svg{width:25.75px;height:25.75px}
+.social-instagram svg{fill:none;stroke:#fff;stroke-width:2.15;stroke-linecap:round;stroke-linejoin:round;overflow:hidden;shape-rendering:geometricPrecision}
+.social-instagram svg{transform:scale(1.03)}
+.social-instagram .social-dot{fill:#fff;stroke:none}
 
 /* Project library filters for current and future work */
 .projects-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;padding:0 0 24px}
@@ -459,3 +514,5 @@ body{background-color:#e9eff5;background-image:linear-gradient(rgba(239,244,249,
   .work{padding-top:18px}
   .cursor-follower{display:none!important}
 }
+
+
