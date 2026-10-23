@@ -210,7 +210,7 @@ if (supportsMagneticHover) {
 
 const cursorFollower = document.querySelector('.cursor-follower');
 const zoomWordClass = 'cursor-word-zoom';
-const zoomExcludedSelector = '.project-card, script, style, noscript, textarea, input, select, option, .cursor-follower';
+const zoomExcludedSelector = '.project-card, script, style, noscript, textarea, input, select, option, .cursor-follower, .social-links';
 let activeZoomWord = null;
 
 const wrapZoomWords = (root) => {
@@ -279,7 +279,7 @@ const followPointer = () => {
 
 document.addEventListener('pointermove', (event) => {
   if (event.pointerType === 'touch') return;
-  const nextWord = nearestZoomWord(event.clientX, event.clientY);
+  const nextWord = event.target.closest?.('.social-links') ? null : nearestZoomWord(event.clientX, event.clientY);
   if (nextWord !== activeZoomWord) {
     activeZoomWord?.classList.remove('is-active');
     activeZoomWord = nextWord;
@@ -609,3 +609,7 @@ document.querySelectorAll('.destination-reel').forEach((reel) => {
   reel.addEventListener('pointercancel', finishDrag);
   reel.addEventListener('lostpointercapture', finishDrag);
 });
+
+
+
+
